@@ -1,0 +1,81 @@
+CREATE TABLE User (
+    id UUID PRIMARY KEY,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    username VARCHAR(50) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    mac_address VARCHAR(17) UNIQUE NOT NULL,
+    token VARCHAR(100) NULL,
+    token_expiration TIMESTAMP NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+)
+
+CREATE TABLE Company (
+    id UUID PRIMARY KEY,
+    user_id UUID NOT NULL,
+    name VARCHAR(100) UNIQUE NOT NULL,
+    invoice_date DATE NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES User(id) ON DELETE CASCADE,
+    INDEX idx_user_id (user_id)
+)
+
+CREATE TABLE Card (
+    id UUID PRIMARY KEY,
+    company_id UUID NOT NULL,
+    card_number VARCHAR(11) UNIQUE NOT NULL,
+    start_date DATE NOT NULL,
+    sell_date DATE NULL,
+    package_before_taxes DECIMAL(10, 2) NOT NULL,
+    package_after_taxes DECIMAL(10, 2) NOT NULL,
+    offers VARCHAR(100) NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (company_id) REFERENCES Company(id) ON DELETE CASCADE,
+    INDEX idx_company_id (company_id)
+)
+
+CREATE TABLE Customer (
+    id UUID PRIMARY KEY,
+    user_id UUID NOT NULL,
+    name VARCHAR(100) NOT NULL,
+    national_id VARCHAR(14) UNIQUE NOT NULL,
+    grand_name VARCHAR(100) NULL,
+    address VARCHAR(150) NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES User(id) ON DELETE CASCADE,
+    INDEX idx_user_id (user_id)
+)
+
+CREATE TABLE Invoice (
+    id UUID PRIMARY KEY,
+    customer_id UUID NOT NULL,
+    company_id UUID NOT NULL,
+    card_id UUID NOT NULL,
+    invoice_date DATE NOT NULL,
+    status ENUM('PAID', 'UNPAID', 'PENDING') NOT NULL DEFAULT 'UNPAID',
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (customer_id) REFERENCES Customer(id) ON DELETE CASCADE,
+    FOREIGN KEY (company_id) REFERENCES Company(id) ON DELETE CASCADE,
+    FOREIGN KEY (card_id) REFERENCES Card(id) ON DELETE CASCADE,
+    INDEX idx_company_id (company_id),
+    INDEX idx_customer_id (customer_id),
+    INDEX idx_card_id (card_id),
+    INDEX idx_invoice_status (status)
+);
+
+
+CREATE TABLE CustomerCard (
+    id UUID PRIMARY KEY,
+    customer_id UUID NOT NULL,
+    card_id UUID NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (customer_id) REFERENCES Customer(id) ON DELETE CASCADE,
+    FOREIGN KEY (card_id) REFERENCES Card(id) ON DELETE CASCADE,
+    INDEX idx_customer_id (customer_id),
+    INDEX idx_card_id (card_id)
+);
