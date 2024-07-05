@@ -28,6 +28,12 @@ const config = {
           700: "#027A48",
           900: "#054F31",
         },
+        primary: {
+          DEFAULT: "#5382DE",
+        },
+        active: {
+          DEFAULT: "#385B9E",
+        },
         pink: {
           25: "#FEF6FB",
           100: "#FCE7F6",
@@ -68,7 +74,7 @@ const config = {
         },
       },
       backgroundImage: {
-        "link-gradient": "linear-gradient(90deg, #0179FE 0%, #4893FF 100%)",
+        "link-gradient": "linear-gradient(90deg, #385B9E 0%, #0f03FF 100%)",
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",

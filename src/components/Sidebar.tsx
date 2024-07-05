@@ -2,11 +2,13 @@
 
 import { cn } from "@/lib/utils";
 import { sidebarLinks } from "@/utils/constants";
+import { User } from "@supabase/supabase-js";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { ProfileSidebar } from "./ProfileSidebar";
 
-export const Sidebar = async () => {
+export const Sidebar = async ({ user }: { user: User }) => {
   const pathname = usePathname();
 
   return (
@@ -17,6 +19,7 @@ export const Sidebar = async () => {
           {/* TODO: LOGO */}
         </div>
 
+        <ProfileSidebar user={user} />
         {sidebarLinks.map((item) => {
           const isActive = pathname === item.route;
 
@@ -24,14 +27,14 @@ export const Sidebar = async () => {
             <Link
               href={item.route}
               key={item.label}
-              className={cn("sidebar-link", { "bg-link-gradient": isActive })}>
+              className={cn("sidebar-link", { "bg-active": isActive })}>
               <div className="relative size-6">
                 <Image
                   src={item.imageUrl}
                   alt={item.label}
                   fill
                   className={cn({
-                    "brightness-[3] invert-0": isActive,
+                    "brightness-[1] invert-0": isActive,
                   })}
                 />
               </div>

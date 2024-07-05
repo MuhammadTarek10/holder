@@ -1,17 +1,22 @@
 export const sidebarLinks = [
   {
-    label: "Dashboard",
-    route: "/dashboard",
-    imageUrl: "/images/db.png",
+    label: "Home",
+    route: "/home",
+    imageUrl: "/icons/home.svg",
   },
   {
-    label: "Login",
-    route: "/login",
-    imageUrl: "/images/db.png",
+    label: "All",
+    route: "/all",
+    imageUrl: "/icons/all.svg",
   },
   {
-    label: "Dashboard",
-    route: "/dashboard",
-    imageUrl: "/images/db.png",
+    label: "Companies",
+    route: "/companies",
+    imageUrl: "/icons/companies.svg",
+  },
+  {
+    label: "Profile",
+    route: "/profile",
+    imageUrl: "/icons/profile.svg",
   },
 ];

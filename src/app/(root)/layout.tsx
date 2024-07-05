@@ -8,7 +8,7 @@ const RootLayout = async ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="flex justify-between">
       {children}
-      <Sidebar />
+      <Sidebar user={user!} />
     </div>
   );
 };
