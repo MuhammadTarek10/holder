@@ -4,11 +4,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 
+import { login } from "@/actions/auth/client-auth";
 import CustomInput from "@/components/CustomFormInput";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import { authFormSchema } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { AuthError } from "@supabase/supabase-js";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -29,9 +31,15 @@ const LoginForm = () => {
   // 2. Define a submit handler.
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     try {
-      console.log(data);
-    } catch (error) {
-      console.log(error);
+      setIsLoading(true);
+      await login(data.email, data.password);
+    } catch (e) {
+      form.setError("email", {
+        type: "manual",
+        message: (e as AuthError).message,
+      });
+    } finally {
+      setIsLoading(false);
     }
   };
 
